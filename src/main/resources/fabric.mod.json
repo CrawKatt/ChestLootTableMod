@@ -29,7 +29,7 @@
 		"loot-table-mod.mixins.json",
 		{
 			"config": "loot-table-mod.client.mixins.json",
-			"environment": "client"
+			"environment": "server"
 		}
 	],
 	"depends": {

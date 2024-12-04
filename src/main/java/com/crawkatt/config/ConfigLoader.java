@@ -15,7 +15,7 @@ import java.util.Map;
 public class ConfigLoader {
     private static final Path CONFIG_PATH = Path.of("config", "chestloot.json");
     private static Map<String, List<Identifier>> biomeLootMap = new HashMap<>();
-    private static List<Identifier> defaultLoot = new ArrayList<>();
+    public static List<Identifier> defaultLoot = new ArrayList<>();
 
     public static void loadConfig() {
         try {
