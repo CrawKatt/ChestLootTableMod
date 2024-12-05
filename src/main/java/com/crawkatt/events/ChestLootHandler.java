@@ -22,6 +22,7 @@ public class ChestLootHandler {
     public static void registerEvents() {
         UseBlockCallback.EVENT.register((player, world, hand, hitResult) -> {
             if (world.isClient) return ActionResult.PASS;
+            if (!player.isCreative()) return ActionResult.PASS;
 
             BlockPos pos = hitResult.getBlockPos();
             if (world.getBlockState(pos).getBlock() == Blocks.CHEST) {
@@ -42,10 +43,12 @@ public class ChestLootHandler {
                         chest.setLootTable(lootTable, world.getRandom().nextLong());
                     }
                     chest.markDirty();
+
+                    return ActionResult.PASS;
                 }
             }
 
-            return ActionResult.SUCCESS;
+            return ActionResult.PASS;
         });
     }
 
@@ -63,12 +66,8 @@ public class ChestLootHandler {
             if (!lootTables.isEmpty()) {
                 return lootTables.get(new Random().nextInt(lootTables.size()));
             }
-
-            if (!ConfigLoader.defaultLoot.isEmpty()) {
-                return ConfigLoader.defaultLoot.get(new Random().nextInt(ConfigLoader.defaultLoot.size()));
-            }
         }
 
-        return null;
+        return new Identifier("minecraft", "empty");
     }
 }

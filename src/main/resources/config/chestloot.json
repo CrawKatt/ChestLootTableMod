@@ -1,8 +1,0 @@
-{
-  "default": ["minecraft:chests/simple_dungeon"],
-  "biomes": {
-    "minecraft:plains": ["minecraft:chests/village_plains_house"],
-    "minecraft:desert": ["minecraft:chests/desert_pyramid"],
-    "minecraft:jungle": ["minecraft:chests/jungle_temple"]
-  }
-}

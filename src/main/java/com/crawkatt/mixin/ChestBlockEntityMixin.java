@@ -12,15 +12,13 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 @Mixin(ChestBlockEntity.class)
 public abstract class ChestBlockEntityMixin implements ChestBlockEntityAccess {
 	@Unique
-	private boolean used = false; // Nuestra variable para el NBT personalizado
+	private boolean used = false;
 
-	// Leer el NBT personalizado
 	@Inject(method = "readNbt", at = @At("TAIL"))
 	private void readUsedNbt(NbtCompound nbt, CallbackInfo ci) {
 		this.used = nbt.getBoolean("used");
 	}
 
-	// Escribir el NBT personalizado
 	@Inject(method = "writeNbt", at = @At("TAIL"))
 	private void writeUsedNbt(NbtCompound nbt, CallbackInfo ci) {
 		nbt.putBoolean("used", this.used);
