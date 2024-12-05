@@ -24,10 +24,7 @@ public class ChestLootHandler {
             if (world.isClient || !player.isCreative() || player.isSpectator()) return ActionResult.PASS;
 
             BlockPos pos = hitResult.getBlockPos();
-            if (isChest(world, pos)) {
-                handleChest(world, pos);
-            }
-
+            if (isChest(world, pos)) handleChest(world, pos);
             return ActionResult.PASS;
         });
     }
@@ -58,14 +55,14 @@ public class ChestLootHandler {
     }
 
     private static void assignLootTable(ChestBlockEntity chest, World world, BlockPos pos) {
-        Identifier lootTable = getLootTableForBiome(world, pos);
-        if (lootTable != null) chest.setLootTable(lootTable, RANDOM.nextLong());
+        Optional.ofNullable(getLootTableForBiome(world, pos))
+                .ifPresent(lootTable -> chest.setLootTable(lootTable, RANDOM.nextLong()));
     }
 
     private static Identifier getLootTableForBiome(World world, BlockPos pos) {
         return getBiomeIdentifier(world, pos)
                 .flatMap(biomeId -> getRandomLootTable(ConfigLoader.getLootTables(biomeId)))
-                .orElseGet(() -> getRandomLootTable(ConfigLoader.defaultLoot).orElse(null));
+                .orElseGet(() -> getRandomLootTable(ConfigLoader.defaultLoot).orElseThrow());
     }
 
     private static Optional<String> getBiomeIdentifier(World world, BlockPos pos) {

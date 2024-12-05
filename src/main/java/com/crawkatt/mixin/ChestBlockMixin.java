@@ -21,9 +21,7 @@ public class ChestBlockMixin {
 
     @Inject(method = "onPlaced", at = @At("TAIL"))
     private void onChestPlaced(World world, BlockPos pos, BlockState state, PlayerEntity placer, ItemStack itemStack, CallbackInfo ci) {
-        if (shouldProcess(world, placer)) {
-            processChest(world, pos, state);
-        }
+        if (shouldProcess(world, placer)) processChest(world, pos, state);
     }
 
     private boolean shouldProcess(World world, PlayerEntity placer) {
