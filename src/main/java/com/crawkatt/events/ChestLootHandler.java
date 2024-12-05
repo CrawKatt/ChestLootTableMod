@@ -62,7 +62,7 @@ public class ChestLootHandler {
     private static Identifier getLootTableForBiome(World world, BlockPos pos) {
         return getBiomeIdentifier(world, pos)
                 .flatMap(biomeId -> getRandomLootTable(ConfigLoader.getLootTables(biomeId)))
-                .orElseGet(() -> getRandomLootTable(ConfigLoader.defaultLoot).orElseThrow());
+                .orElseGet(() -> getRandomLootTable(ConfigLoader.defaultLoot).orElse(null));
     }
 
     private static Optional<String> getBiomeIdentifier(World world, BlockPos pos) {
