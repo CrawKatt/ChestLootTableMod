@@ -1,6 +1,8 @@
 package com.crawkatt.config;
 
 import com.crawkatt.ChestLootMod;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import net.minecraft.util.Identifier;
@@ -66,13 +68,14 @@ public class ConfigLoader {
     }
 
     private static void createDefaultJson() throws IOException {
+        Gson gson = new GsonBuilder().setPrettyPrinting().create();
+        JsonObject root = new JsonObject();
+
+        root.add(DEFAULT_KEY, gson.toJsonTree(new ArrayList<>()));
+        root.add(BIOMES_KEY, new JsonObject());
+
         try (FileWriter writer = new FileWriter(CONFIG_PATH.toFile())) {
-            writer.write("""
-            {
-              "default": [],
-              "biomes": {}
-            }
-            """);
+            gson.toJson(root, writer);
         }
     }
 
