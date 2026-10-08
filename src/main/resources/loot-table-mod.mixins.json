@@ -3,7 +3,8 @@
 	"package": "com.crawkatt.mixin",
 	"compatibilityLevel": "JAVA_21",
 	"mixins": [
-      "ChestBlockEntityMixin"
+      "ChestBlockEntityMixin",
+      "ChestPlacementMixin"
 	],
 	"injectors": {
 		"defaultRequire": 1
