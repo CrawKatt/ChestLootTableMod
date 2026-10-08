@@ -43,7 +43,7 @@ public class ConfigLoader {
     private static void loadDefaultLoot(JsonObject json) {
         defaultLoot = new ArrayList<>();
         Optional.ofNullable(json.getAsJsonArray(DEFAULT_KEY))
-                .ifPresent(defaultArray -> defaultArray.forEach(element -> defaultLoot.add(new Identifier(element.getAsString()))));
+                .ifPresent(defaultArray -> defaultArray.forEach(element -> defaultLoot.add(Identifier.of(element.getAsString()))));
     }
 
     private static void loadBiomeLoot(JsonObject json) {
@@ -53,7 +53,7 @@ public class ConfigLoader {
                     String biome = entry.getKey();
                     List<Identifier> lootTables = new ArrayList<>();
                     Optional.ofNullable(entry.getValue().getAsJsonArray())
-                            .ifPresent(lootArray -> lootArray.forEach(element -> lootTables.add(new Identifier(element.getAsString()))));
+                            .ifPresent(lootArray -> lootArray.forEach(element -> lootTables.add(Identifier.of(element.getAsString()))));
                     biomeLootMap.put(biome, lootTables);
                 }));
     }

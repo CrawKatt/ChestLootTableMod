@@ -13,7 +13,7 @@ public class ChestLootCommand {
                 .then(CommandManager.literal("reload")
                         .executes(context -> {
                             ConfigLoader.loadConfig();
-                            context.getSource().sendFeedback(Text.of("ChestLoot configuration reloaded!"), true);
+                            context.getSource().sendFeedback(() -> Text.of("ChestLoot configuration reloaded!"), true);
                             return 1;
                         }))
         );

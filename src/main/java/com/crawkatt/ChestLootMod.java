@@ -4,6 +4,8 @@ import com.crawkatt.commands.ChestLootCommand;
 import com.crawkatt.config.ConfigLoader;
 import com.crawkatt.events.ChestLootHandler;
 import net.fabricmc.api.ModInitializer;
+import net.minecraft.registry.Registries;
+import net.minecraft.registry.Registry;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -13,6 +15,7 @@ public class ChestLootMod implements ModInitializer {
 
 	@Override
 	public void onInitialize() {
+
 		ConfigLoader.loadConfig();
 
 		ChestLootHandler.registerEvents();

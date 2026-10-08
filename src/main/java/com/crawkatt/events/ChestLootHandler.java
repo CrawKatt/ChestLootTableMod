@@ -1,10 +1,16 @@
 package com.crawkatt.events;
 
+import com.crawkatt.ChestLootMod;
 import com.crawkatt.config.ConfigLoader;
-import com.crawkatt.util.ChestBlockEntityAccess;
+import com.mojang.serialization.Codec;
 import net.fabricmc.fabric.api.event.player.UseBlockCallback;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.entity.ChestBlockEntity;
+import net.minecraft.component.ComponentMap;
+import net.minecraft.component.ComponentType;
+import net.minecraft.registry.Registries;
+import net.minecraft.registry.Registry;
+import net.minecraft.registry.RegistryKey;
 import net.minecraft.registry.RegistryKeys;
 import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.util.ActionResult;
@@ -18,8 +24,11 @@ import java.util.Random;
 
 public class ChestLootHandler {
     private static final Random RANDOM = new Random();
+    public static final Identifier USED_COMPONENT_ID = Identifier.of(ChestLootMod.MOD_ID, "used");
+    public static final ComponentType<Boolean> USED_COMPONENT = ComponentType.<Boolean>builder().codec(Codec.BOOL).build();
 
     public static void registerEvents() {
+        Registry.register(Registries.DATA_COMPONENT_TYPE, USED_COMPONENT_ID, USED_COMPONENT);
         UseBlockCallback.EVENT.register((player, world, hand, hitResult) -> {
             if (world.isClient || !player.isCreative() || player.isSpectator()) return ActionResult.PASS;
 
@@ -45,18 +54,19 @@ public class ChestLootHandler {
     }
 
     private static void processChest(ChestBlockEntity chest, World world, BlockPos pos) {
-        if (chest instanceof ChestBlockEntityAccess accessor) {
-            if (accessor.lootTablesMod$isUsed()) return;
+        if (chest.getComponents().getOrDefault(ChestLootHandler.USED_COMPONENT, false)) return;
 
-            accessor.lootTablesMod$setUsed(true);
-            assignLootTable(chest, world, pos);
-            chest.markDirty();
-        }
+        chest.setComponents(ComponentMap.builder()
+                .addAll(chest.getComponents())
+                .add(ChestLootHandler.USED_COMPONENT, true)
+                .build());
+        assignLootTable(chest, world, pos);
+        chest.markDirty();
     }
 
     private static void assignLootTable(ChestBlockEntity chest, World world, BlockPos pos) {
         Optional.ofNullable(getLootTableForBiome(world, pos))
-                .ifPresent(lootTable -> chest.setLootTable(lootTable, RANDOM.nextLong()));
+                .ifPresent(lootTable -> chest.setLootTable(RegistryKey.of(RegistryKeys.LOOT_TABLE, lootTable), RANDOM.nextLong()));
     }
 
     private static Identifier getLootTableForBiome(World world, BlockPos pos) {
